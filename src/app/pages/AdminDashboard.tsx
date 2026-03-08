@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AdminSidebar } from "../components/AdminSidebar";
 import { KPICard } from "../components/KPICard";
 import { StatusBadge } from "../components/StatusBadge";
@@ -21,13 +21,43 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { Ticket, FolderOpen, AlertCircle, Clock, Users } from "lucide-react";
-import { mockTickets, categories } from "../data/mockData";
+import { Ticket, FolderOpen, AlertCircle, Clock, Users, LogOut } from "lucide-react";
+import { mockTickets, categories, hrStaff } from "../data/mockData";
+import { useAuth } from "../contexts/AuthContext";
+
+// --- Honeycomb Pattern Component ---
+const HoneycombPattern = ({ className }: { className?: string }) => (
+  <svg 
+    className={`absolute pointer-events-none ${className}`} 
+    width="250" 
+    height="250" 
+    viewBox="0 0 450 450" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <polygon 
+        id="hex-admin" 
+        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
+      />
+    </defs>
+    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
+      <use href="#hex-admin" x="173.2" y="150" />
+      <use href="#hex-admin" x="86.6" y="0" />
+      <use href="#hex-admin" x="259.8" y="0" />
+      <use href="#hex-admin" x="0" y="150" />
+      <use href="#hex-admin" x="346.4" y="150" />
+      <use href="#hex-admin" x="86.6" y="300" />
+      <use href="#hex-admin" x="259.8" y="300" />
+    </g>
+  </svg>
+);
 
 export default function AdminDashboard() {
   const [filterCategory, setFilterCategory] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterPriority, setFilterPriority] = useState("all");
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   // Calculate KPIs
   const totalTickets = mockTickets.length;
@@ -53,11 +83,32 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
+      {/* Honeycomb Backgrounds - fully visible corners */}
+      <HoneycombPattern className="top-0 left-0 scale-150" />
+      <HoneycombPattern className="bottom-0 right-0 scale-150 rotate-180" />
       <AdminSidebar />
 
       <div className="flex-1 overflow-auto">
         <div className="max-w-7xl mx-auto px-8 py-8">
+          {/* Header with User Info and Logout */}
+          <div className="flex justify-end items-center mb-8">
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-sm font-medium">{user.name}</p>
+                <p className="text-xs text-gray-500">{user.role.toUpperCase()}</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/")}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          </div>
+
           <div className="mb-8">
             <h1 className="text-3xl font-semibold text-gray-900">Admin Dashboard</h1>
             <p className="text-gray-600 mt-1">Manage and monitor all HR tickets</p>
@@ -114,16 +165,18 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-gray-600">Assigned to:</span>
-                      <div className="flex gap-2">
-                        {category.assignedHR.map((hr) => (
-                          <span
-                            key={hr}
-                            className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
-                          >
-                            {hr}
-                          </span>
-                        ))}
-                      </div>
+                      <Select defaultValue={category.assignedHR[0]}>
+                        <SelectTrigger className="h-9 w-48">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {hrStaff.map((hr) => (
+                            <SelectItem key={hr} value={hr}>
+                              {hr}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 ))}

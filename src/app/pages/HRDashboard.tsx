@@ -23,6 +23,33 @@ import {
 import { Ticket, FolderOpen, Clock, LogOut } from "lucide-react";
 import { mockTickets, categories } from "../data/mockData";
 
+// --- Honeycomb Pattern Component ---
+const HoneycombPattern = ({ className }: { className?: string }) => (
+  <svg 
+    className={`absolute pointer-events-none ${className}`} 
+    width="250" 
+    height="250" 
+    viewBox="0 0 450 450" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <polygon 
+        id="hex-hr" 
+        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
+      />
+    </defs>
+    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
+      <use href="#hex-hr" x="173.2" y="150" />
+      <use href="#hex-hr" x="86.6" y="0" />
+      <use href="#hex-hr" x="259.8" y="0" />
+      <use href="#hex-hr" x="0" y="150" />
+      <use href="#hex-hr" x="346.4" y="150" />
+      <use href="#hex-hr" x="86.6" y="300" />
+      <use href="#hex-hr" x="259.8" y="300" />
+    </g>
+  </svg>
+);
+
 export default function HRDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -58,7 +85,11 @@ export default function HRDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+      {/* Honeycomb Backgrounds - center-right and bottom-right, behind content */}
+      <HoneycombPattern className="top-1/2 right-0 translate-y-[-50%] translate-x-[10%] scale-125 z-0" />
+      <HoneycombPattern className="bottom-0 right-0 translate-x-[20%] translate-y-[20%] scale-110 rotate-180 z-0" />
+      
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

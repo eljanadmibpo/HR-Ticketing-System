@@ -1,22 +1,56 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Building2 } from "lucide-react";
-import { mockUsers } from "../data/mockData";
 import logo from "../../assets/logo.png";
+import "../../styles/login.css";
 
-export default function LoginPage() {
+// --- Mock Data ---
+const mockUsers = [
+  { id: "HR-001", name: "HR Admin", email: "hr@company.com", role: "hr" as const },
+  { id: "SYS-001", name: "System Admin", email: "admin@company.com", role: "admin" as const }
+];
+
+// --- Custom SVG Components ---
+
+// Honeycomb Pattern Component
+const HoneycombPattern = ({ className }) => (
+  <svg 
+    className={`absolute pointer-events-none ${className}`} 
+    width="250" 
+    height="250" 
+    viewBox="0 0 450 450" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      {/* Pointy-topped hexagon with Radius = 100 */}
+      <polygon 
+        id="hex" 
+        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
+      />
+    </defs>
+    {/* Group with opacity so overlapping strokes don't multiply in darkness */}
+    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
+      <use href="#hex" x="173.2" y="150" />   {/* Center */}
+      <use href="#hex" x="86.6" y="0" />      {/* Top Left */}
+      <use href="#hex" x="259.8" y="0" />     {/* Top Right */}
+      <use href="#hex" x="0" y="150" />       {/* Left */}
+      <use href="#hex" x="346.4" y="150" />   {/* Right */}
+      <use href="#hex" x="86.6" y="300" />    {/* Bottom Left */}
+      <use href="#hex" x="259.8" y="300" />   {/* Bottom Right */}
+    </g>
+  </svg>
+);
+
+
+// --- Main Page Component ---
+export default function App() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"employee" | "hr" | "admin">("employee");
+  const [selectedRole, setSelectedRole] = useState("employee");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     
     // Mock login - set user based on selected role
@@ -26,13 +60,13 @@ export default function LoginPage() {
         id: "EMP-1234",
         name: "Sarah Johnson",
         email: "sarah.johnson@company.com",
-        role: "employee" as const,
+        role: "employee",
         department: "Engineering",
       };
     } else if (selectedRole === "hr") {
-      mockUser = mockUsers.find(u => u.role === "hr")!;
+      mockUser = mockUsers.find(u => u.role === "hr");
     } else {
-      mockUser = mockUsers.find(u => u.role === "admin")!;
+      mockUser = mockUsers.find(u => u.role === "admin");
     }
 
     setUser(mockUser);
@@ -48,28 +82,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative bg-gray-50">
-      {/* Honeycomb SVG background */}
-      <div className="honeycomb-bg-svg">
-        <svg className="honeycomb-svg honeycomb-svg-top" viewBox="0 0 220 320" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="honeycomb-top" patternUnits="userSpaceOnUse" width="60" height="52" patternTransform="scale(1)">
-              <polygon points="30,5 55,17.5 55,37.5 30,50 5,37.5 5,17.5" fill="none" stroke="#b0bf00" strokeWidth="1.5" opacity="0.8"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#honeycomb-top)" />
-        </svg>
-        <svg className="honeycomb-svg honeycomb-svg-bottom" viewBox="0 0 220 320" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="honeycomb-bottom" patternUnits="userSpaceOnUse" width="60" height="52" patternTransform="scale(1)">
-              <polygon points="30,5 55,17.5 55,37.5 30,50 5,37.5 5,17.5" fill="none" stroke="#b0bf00" strokeWidth="1.5" opacity="0.8"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#honeycomb-bottom)" />
-        </svg>
-      </div>
-      <Card className="w-full max-w-md shadow-lg border-none login-gradient relative z-10">
-        <CardHeader className="space-y-4 text-center">
+    <div className="min-h-screen flex items-center justify-center relative bg-[#f8f9fa] overflow-hidden font-sans">
+      
+      {/* Large Honeycomb Backgrounds - positioned to be fully visible */}
+      <HoneycombPattern className="top-0 left-0 scale-150" />
+      <HoneycombPattern className="bottom-0 right-0 scale-150 rotate-180" />
+
+      {/* Login Card */}
+      <div className="w-full max-w-sm sm:max-w-md shadow-xl border border-gray-100 login-gradient relative z-10 rounded-2xl p-8 sm:p-10 mx-4">
+        
+        <div className="space-y-4 text-center mb-8">
           <div className="flex justify-center">
             <img 
               src={logo} 
@@ -77,77 +99,87 @@ export default function LoginPage() {
               className="w-16 h-16 rounded-2xl shadow-md object-cover"
             />
           </div>
-          <div>
-            <CardTitle className="text-2xl font-bold">HUMAN RESOURCE<br/>TICKETING</CardTitle>
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-black leading-tight">
+            HUMAN RESOURCE<br/>TICKETING
+          </h1>
+        </div>
+
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div className="space-y-1.5 text-left">
+            <label htmlFor="email" className="text-sm font-medium text-gray-800">
+              Employee ID/ Email
+            </label>
+            <input
+              id="email"
+              type="text"
+              placeholder="Enter your Employee ID or Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full h-11 px-3 py-2 bg-gray-100 border-none rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#b0bf00]/50 transition-shadow"
+            />
           </div>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Employee ID / Email</Label>
-              <Input
-                id="email"
-                type="text"
-                placeholder="Enter your Employee ID or Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="h-11"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="h-11"
-              />
-            </div>
-            <Button 
-              type="submit" 
-              style={{ backgroundColor: 'rgb(176, 191, 0)', borderColor: 'rgb(176, 191, 0)' }}
-              className="w-full h-11 hover:bg-opacity-90 text-white mt-2"
-            >
-              Sign In
-            </Button>
-            <div className="text-center text-xs text-gray-500 mt-2">login via</div>
+
+          <div className="space-y-1.5 text-left">
+            <label htmlFor="password" className="text-sm font-medium text-gray-800">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full h-11 px-3 py-2 bg-gray-100 border-none rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#b0bf00]/50 transition-shadow"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            style={{ backgroundColor: 'rgb(176, 191, 0)' }}
+            className="w-full h-11 rounded-md text-white font-medium text-base shadow-md hover:opacity-90 active:scale-[0.98] transition-all mt-2"
+          >
+            Sign In
+          </button>
+
+          <div className="pt-2 text-center">
+            <div className="text-xs text-gray-500 mb-2">login via</div>
             <div className="google-btn">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width={24} height={24} />
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" 
+                alt="Google Login" 
+                width={20} 
+                height={20} 
+              />
             </div>
-            {/* Demo toggle for testing */}
-            <div className="pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-600 text-center mb-2">Demo Mode - Select Role:</p>
-              <div className="flex gap-2">
-                <Button
+          </div>
+
+          {/* Demo toggle for testing */}
+          <div className="pt-6 mt-6 border-t border-black/5">
+            <p className="text-[10px] uppercase tracking-wider text-gray-500 text-center mb-3 font-semibold">
+              Demo Mode - Select Role
+            </p>
+            <div className="flex gap-2">
+              {['employee', 'hr', 'admin'].map((role) => (
+                <button
+                  key={role}
                   type="button"
-                  variant={selectedRole === "employee" ? "default" : "outline"}
-                  onClick={() => setSelectedRole("employee")}
-                  className="flex-1"
-                  size="sm"
-                >Employee</Button>
-                <Button
-                  type="button"
-                  variant={selectedRole === "hr" ? "default" : "outline"}
-                  onClick={() => setSelectedRole("hr")}
-                  className="flex-1"
-                  size="sm"
-                >HR</Button>
-                <Button
-                  type="button"
-                  variant={selectedRole === "admin" ? "default" : "outline"}
-                  onClick={() => setSelectedRole("admin")}
-                  className="flex-1"
-                  size="sm"
-                >Admin</Button>
-              </div>
+                  onClick={() => setSelectedRole(role)}
+                  className={`flex-1 py-1.5 text-xs rounded-md transition-colors border ${
+                    selectedRole === role 
+                      ? "bg-gray-800 text-white border-gray-800" 
+                      : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  {role.charAt(0).toUpperCase() + role.slice(1)}
+                </button>
+              ))}
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
+        </form>
+
+      </div>
     </div>
   );
 }

@@ -5,8 +5,7 @@ import {
   Ticket, 
   UserCircle, 
   FileText, 
-  Settings,
-  LogOut
+  Settings
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -15,7 +14,6 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ className }: AdminSidebarProps) {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const navItems = [
     { path: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -51,16 +49,6 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
           );
         })}
       </nav>
-
-      <div className="absolute bottom-0 w-full p-3 border-t border-gray-200">
-        <button 
-          onClick={() => navigate("/")}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-gray-700 hover:bg-gray-50 transition-colors text-sm"
-        >
-          <LogOut className="w-5 h-5" />
-          Logout
-        </button>
-      </div>
     </div>
   );
 }
