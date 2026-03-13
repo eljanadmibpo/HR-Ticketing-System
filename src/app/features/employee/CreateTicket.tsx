@@ -17,32 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { Upload, X } from "lucide-react";
 import { categories } from "../../data/mockData";
 
-// --- Honeycomb Pattern Component ---
-const HoneycombPattern = ({ className }: { className?: string }) => (
-  <svg 
-    className={`absolute pointer-events-none ${className}`} 
-    width="250" 
-    height="250" 
-    viewBox="0 0 450 450" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <polygon 
-        id="hex-create" 
-        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
-      />
-    </defs>
-    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
-      <use href="#hex-create" x="173.2" y="150" />
-      <use href="#hex-create" x="86.6" y="0" />
-      <use href="#hex-create" x="259.8" y="0" />
-      <use href="#hex-create" x="0" y="150" />
-      <use href="#hex-create" x="346.4" y="150" />
-      <use href="#hex-create" x="86.6" y="300" />
-      <use href="#hex-create" x="259.8" y="300" />
-    </g>
-  </svg>
-);
+
 
 export default function CreateTicket() {
   const navigate = useNavigate();
@@ -71,10 +46,7 @@ export default function CreateTicket() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
-      {/* Honeycomb Backgrounds - bottom-right and center-left, behind content */}
-      <HoneycombPattern className="bottom-0 right-0 translate-x-[20%] translate-y-[20%] scale-110 rotate-180 z-0" />
-      <HoneycombPattern className="top-1/2 left-0 translate-y-[-50%] -translate-x-[10%] scale-125 z-0" />
+    <div className="min-h-screen bg-gray-50">
       
       <EmployeeNavbar />
 

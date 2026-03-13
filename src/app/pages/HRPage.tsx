@@ -62,26 +62,7 @@ const KPICard: React.FC<KPICardProps> = ({ title, value, icon: Icon, color }) =>
   </div>
 );
 
-const HoneycombPattern: React.FC<{ className?: string }> = ({ className }) => (
-  <svg 
-    className={`absolute pointer-events-none opacity-20 ${className}`} 
-    width="300" 
-    height="300" 
-    viewBox="0 0 450 450" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <polygon id="hex" points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" />
-    </defs>
-    <g stroke="#B0BF00" strokeWidth="8" fill="none">
-      <use href="#hex" x="173.2" y="150" />
-      <use href="#hex" x="86.6" y="0" />
-      <use href="#hex" x="259.8" y="0" />
-      <use href="#hex" x="0" y="150" />
-      <use href="#hex" x="346.4" y="150" />
-    </g>
-  </svg>
-);
+
 
 interface ToggleProps {
   active: boolean;
@@ -205,7 +186,7 @@ export default function HRPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        <HoneycombPattern className="-top-20 -right-20 rotate-12" />
+
         
         {/* Top Navbar */}
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 px-8 flex items-center justify-between z-40 sticky top-0">

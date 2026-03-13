@@ -10,39 +10,7 @@ const mockUsers = [
   { id: "SYS-001", name: "System Admin", email: "admin@company.com", role: "admin" as const }
 ];
 
-// --- Custom SVG Components ---
 
-// Honeycomb Pattern Component
-const HoneycombPattern = ({ className }) => (
-  <svg 
-    className={`absolute pointer-events-none ${className}`} 
-    width="250" 
-    height="250" 
-    viewBox="0 0 450 450" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      {/* Pointy-topped hexagon with Radius = 100 */}
-      <polygon 
-        id="hex" 
-        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
-      />
-    </defs>
-    {/* Group with opacity so overlapping strokes don't multiply in darkness */}
-    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
-      <use href="#hex" x="173.2" y="150" />   {/* Center */}
-      <use href="#hex" x="86.6" y="0" />      {/* Top Left */}
-      <use href="#hex" x="259.8" y="0" />     {/* Top Right */}
-      <use href="#hex" x="0" y="150" />       {/* Left */}
-      <use href="#hex" x="346.4" y="150" />   {/* Right */}
-      <use href="#hex" x="86.6" y="300" />    {/* Bottom Left */}
-      <use href="#hex" x="259.8" y="300" />   {/* Bottom Right */}
-    </g>
-  </svg>
-);
-
-
-// --- Main Page Component ---
 export default function App() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -83,10 +51,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative bg-[#f8f9fa] overflow-hidden font-sans">
-      
-      {/* Large Honeycomb Backgrounds - positioned to be fully visible */}
-      <HoneycombPattern className="top-0 left-0 scale-150" />
-      <HoneycombPattern className="bottom-0 right-0 scale-150 rotate-180" />
 
       {/* Login Card */}
       <div className="w-full max-w-sm sm:max-w-md shadow-xl border border-gray-100 login-gradient relative z-10 rounded-2xl p-8 sm:p-10 mx-4">
