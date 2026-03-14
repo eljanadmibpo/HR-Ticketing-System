@@ -15,33 +15,6 @@ import { Users, Save, LogOut, Plus, Trash2 } from "lucide-react";
 import { categories, hrStaff } from "../../data/mockData";
 import { useAuth } from "../../contexts/AuthContext";
 
-// --- Honeycomb Pattern Component ---
-const HoneycombPattern = ({ className }: { className?: string }) => (
-  <svg 
-    className={`absolute pointer-events-none ${className}`} 
-    width="250" 
-    height="250" 
-    viewBox="0 0 450 450" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <polygon 
-        id="hex-admin" 
-        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
-      />
-    </defs>
-    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
-      <use href="#hex-admin" x="173.2" y="150" />
-      <use href="#hex-admin" x="86.6" y="0" />
-      <use href="#hex-admin" x="259.8" y="0" />
-      <use href="#hex-admin" x="0" y="150" />
-      <use href="#hex-admin" x="346.4" y="150" />
-      <use href="#hex-admin" x="86.6" y="300" />
-      <use href="#hex-admin" x="259.8" y="300" />
-    </g>
-  </svg>
-);
-
 // Local type for the assignment matrix
 interface CategoryAssignment {
   categoryName: string;
@@ -54,7 +27,7 @@ export default function AdminAssignmentMatrix() {
   const { user } = useAuth();
   
   // State for assignments (editable)
-  const [assignments, setAssignments] = useState<CategoryAssignment[]>(
+  const [assignments, setAssignments ] = useState<CategoryAssignment[]>(
     categories.map((cat) => ({
       categoryName: cat.name,
       subcategories: cat.subcategories,
@@ -101,10 +74,7 @@ export default function AdminAssignmentMatrix() {
   const totalAssignments = assignments.reduce((acc, cat) => acc + cat.assignedHR.length, 0);
 
   return (
-    <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
-      {/* Honeycomb Backgrounds */}
-      <HoneycombPattern className="top-0 left-0 scale-150" />
-      <HoneycombPattern className="bottom-0 right-0 scale-150 rotate-180" />
+    <div className="flex min-h-screen bg-gray-50 overflow-hidden">
       <AdminSidebar />
 
       <div className="flex-1 ml-64 overflow-auto">
@@ -235,7 +205,7 @@ export default function AdminAssignmentMatrix() {
                     <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-semibold text-gray-900">{assignment.categoryName}</h3>
+                          <h3 className="text-lg font-semibold text-gray-900">{assignment.categoryName}</h3>
                           <p className="text-sm text-gray-500 mt-1">
                             {assignment.subcategories.length} subcategories
                           </p>
@@ -261,7 +231,7 @@ export default function AdminAssignmentMatrix() {
                           Subcategories
                         </p>
                         <div className="flex flex-wrap gap-2">
-                          {assignment.subcategories.map((sub: string) => (
+                          {assignment.subcategories.map((sub) => (
                             <Badge key={sub} variant="secondary" className="text-xs">
                               {sub}
                             </Badge>
@@ -278,7 +248,7 @@ export default function AdminAssignmentMatrix() {
                           {assignment.assignedHR.length === 0 ? (
                             <p className="text-sm text-gray-500 italic">No HR staff assigned</p>
                           ) : (
-                            assignment.assignedHR.map((hr: string, hrIndex: number) => (
+                            assignment.assignedHR.map((hr, hrIndex) => (
                               <div
                                 key={`${hr}-${hrIndex}`}
                                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -300,7 +270,7 @@ export default function AdminAssignmentMatrix() {
                                       <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                      {hrStaff.map((staff: string) => (
+                                      {hrStaff.map((staff) => (
                                         <SelectItem key={staff} value={staff}>
                                           {staff}
                                         </SelectItem>
@@ -332,4 +302,3 @@ export default function AdminAssignmentMatrix() {
     </div>
   );
 }
-
